@@ -283,7 +283,7 @@
       "workbox-precaching": "6.5.0",
       "workbox-webpack-plugin": "6.5.0"
     },
-    "hash": "1046c8f1684d8d9f5e6ed2ca756fcc3be2ffbb9c0e30bb3a6aaedf3aebc1bdd5"
+    "hash": "3d0eff07f178c2053c87112d51b6a7f39c6a13e57e3944f7179604602e15ea1d"
   },
   "overrides": {
     "@vaadin/bundles": "$@vaadin/bundles",
@@ -400,6 +400,7 @@
     "construct-style-sheets-polyfill": "$construct-style-sheets-polyfill",
     "lit": "$lit",
     "@polymer/polymer": "$@polymer/polymer",
-    "chokidar": "$chokidar"
+    "chokidar": "$chokidar",
+    "date-fns": "$date-fns"
   }
 }
