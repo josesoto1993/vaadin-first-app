@@ -1,25 +1,42 @@
 package org.vaadin.example.ui;
 
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.Route;
 import org.vaadin.example.backend.entity.Company;
 import org.vaadin.example.backend.entity.Contact;
+import org.vaadin.example.service.CompanyService;
 import org.vaadin.example.service.ContactService;
 
+import java.util.List;
+
 @Route("")
+@CssImport("./styles/shared-styles.css")
 public class MainView extends VerticalLayout {
-
+    //services
     private final ContactService contactService;
+    private final CompanyService companyService;
 
+    //main view components
     Grid<Contact> grid = new Grid<>(Contact.class);
     TextField filterText = new TextField();
+    Button newContactBtn = new Button();
+    HorizontalLayout toolbar = new HorizontalLayout();
 
-    public MainView(ContactService contactService) {
+    //edit form component
+    private ContactForm contactForm;
+
+    public MainView(ContactService contactService,
+                    CompanyService companyService) {
         //Config data
         this.contactService = contactService;
+        this.companyService = companyService;
         this.addClassName("list-view"); //to CSS control
         this.setSizeFull();
 
@@ -27,11 +44,78 @@ public class MainView extends VerticalLayout {
         configureGrid();
         updateContacts();
 
+        //Load toolbar (filter + new Contact)
+        configureToolBar();
+
+        //Load the contact form
+        configureForm();
+
+        //Add components
+        Div content = new Div(grid, contactForm);
+        content.addClassName("content");
+        content.setSizeFull();
+
+        this.add(toolbar, content);
+        closeEditor();
+    }
+
+    private void configureToolBar() {
+        //to CSS control
+        toolbar.addClassName("toolbar");
+
         //Load text filter
         configureFilter();
 
-        //Add components
-        this.add(filterText, grid);
+        //Load button for new contact
+        configureNewContactBtn();
+
+        //put both in toolbar
+        toolbar.add(filterText, newContactBtn);
+    }
+
+    private void configureNewContactBtn() {
+        newContactBtn.setText("Add contact");
+        newContactBtn.addClickListener(click -> addContact());
+    }
+
+    private void addContact() {
+        grid.asSingleSelect().clear();
+        editContact(new Contact());
+    }
+
+    private void configureForm() {
+
+        //to CSS control
+        //contactForm.addClassName("contact-form");//done in constructor, so all forms look's equals
+
+        //create a new one if null:
+        if (contactForm == null) {
+            //create form
+            contactForm = new ContactForm(companyService.findAll(), List.of(Contact.Status.values()));
+            //add the listener's for the buttons
+            contactForm.addListener(ContactForm.SaveEvent.class, this::saveContactForm);
+            contactForm.addListener(ContactForm.DeleteEvent.class, this::deleteContactForm);
+            contactForm.addListener(ContactForm.CloseEvent.class, this::closeContactForm);
+        }
+
+        //to get all possible space
+        contactForm.setSizeFull();
+    }
+
+    private void saveContactForm(ContactForm.SaveEvent saveEvent) {
+        contactService.save(saveEvent.getContact());
+        updateContacts();
+        closeEditor();
+    }
+
+    private void deleteContactForm(ContactForm.DeleteEvent deleteEvent) {
+        contactService.delete(deleteEvent.getContact());
+        updateContacts();
+        closeEditor();
+    }
+
+    private void closeContactForm(ContactForm.CloseEvent closeEvent) {
+        closeEditor();
     }
 
     private void configureFilter() {
@@ -50,13 +134,13 @@ public class MainView extends VerticalLayout {
 
     private void configureGrid() {
         //to CSS control
-        grid.addClassName("contact-Grid");
+        grid.addClassName("contact-grid");
 
         //to get all possible space
         grid.setSizeFull();
 
         //main data from table
-        //grid.removeColumnByKey("company"); // company must be configured as its a class
+        //grid.removeColumnByKey("company"); // company must be configured as it's a class
         grid.setColumns("firstName", "lastName", "email", "status");
 
         //company configuration
@@ -70,6 +154,30 @@ public class MainView extends VerticalLayout {
 
         //allocating space in columns
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
+
+        //selector to interact
+        grid.asSingleSelect().addValueChangeListener(evt -> editContact(evt.getValue()));
+    }
+
+    private void editContact(Contact contact) {
+        if (contact == null) {
+            //deselected
+            closeEditor();
+        } else {
+            openEditor(contact);
+        }
+    }
+
+    private void openEditor(Contact contact) {
+        contactForm.setVisible(true);
+        contactForm.setContact(contact);
+        addClassName("editing");
+    }
+
+    private void closeEditor() {
+        contactForm.setContact(null);
+        contactForm.setVisible(false);
+        removeClassName("editing");
     }
 
     private void updateContacts() {
