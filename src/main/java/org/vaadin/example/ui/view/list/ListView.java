@@ -1,24 +1,25 @@
-package org.vaadin.example.ui;
+package org.vaadin.example.ui.view.list;
 
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import org.vaadin.example.backend.entity.Company;
 import org.vaadin.example.backend.entity.Contact;
 import org.vaadin.example.service.CompanyService;
 import org.vaadin.example.service.ContactService;
+import org.vaadin.example.ui.MainLayout;
 
 import java.util.List;
 
-@Route("")
-@CssImport("./styles/shared-styles.css")
-public class MainView extends VerticalLayout {
+@Route(value = "", layout = MainLayout.class)
+@PageTitle("Contacts | Vaadin CRM")
+public class ListView extends VerticalLayout {
     //services
     private final ContactService contactService;
     private final CompanyService companyService;
@@ -32,7 +33,7 @@ public class MainView extends VerticalLayout {
     //edit form component
     private ContactForm contactForm;
 
-    public MainView(ContactService contactService,
+    public ListView(ContactService contactService,
                     CompanyService companyService) {
         //Config data
         this.contactService = contactService;
@@ -150,7 +151,7 @@ public class MainView extends VerticalLayout {
                 return "-";
             }
             return company.getName();
-        }).setHeader("Company");
+        }).setHeader("Company").setSortable(true);
 
         //allocating space in columns
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
