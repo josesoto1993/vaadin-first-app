@@ -34,7 +34,7 @@ public class SecurityConfig extends VaadinWebSecurityConfigurerAdapter {
                 "/robots.txt",
                 "/manifest.webmanifest",
                 "/sw.js",
-                "/offline.html",
+                "/META-INF/resources/offline.html",
                 "/icons/**",
                 "/images/**",
                 "/styles/**",
