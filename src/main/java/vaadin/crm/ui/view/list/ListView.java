@@ -9,6 +9,8 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 import vaadin.crm.backend.entity.Company;
 import vaadin.crm.backend.entity.Contact;
 import vaadin.crm.service.CompanyService;
@@ -18,6 +20,8 @@ import vaadin.crm.ui.MainLayout;
 import javax.annotation.security.PermitAll;
 import java.util.List;
 
+@Component
+@Scope("prototype")
 @Route(value = "", layout = MainLayout.class)
 @PageTitle("Contacts | Vaadin CRM")
 @PermitAll
@@ -27,10 +31,10 @@ public class ListView extends VerticalLayout {
     private final CompanyService companyService;
 
     //main view components
-    Grid<Contact> grid = new Grid<>(Contact.class);
-    TextField filterText = new TextField();
-    Button newContactBtn = new Button();
-    HorizontalLayout toolbar = new HorizontalLayout();
+    private final Grid<Contact> grid = new Grid<>(Contact.class);
+    private final TextField filterText = new TextField();
+    private final Button newContactBtn = new Button();
+    private final HorizontalLayout toolbar = new HorizontalLayout();
 
     //edit form component
     private ContactForm contactForm;
@@ -60,6 +64,14 @@ public class ListView extends VerticalLayout {
 
         this.add(toolbar, content);
         closeEditor();
+    }
+
+    public Grid<Contact> getGrid() {
+        return grid;
+    }
+
+    public ContactForm getContactForm() {
+        return contactForm;
     }
 
     private void configureToolBar() {
