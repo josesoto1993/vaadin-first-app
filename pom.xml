@@ -4,10 +4,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <!-- Vaadin project from https://github.com/vaadin/skeleton-starter-flow-spring -->
-    <groupId>com.example</groupId>
+    <groupId>vaadin.crm</groupId>
     <artifactId>spring-skeleton</artifactId>
-    <name>Project base for Spring Boot and Vaadin Flow</name>
-    <version>1.0-SNAPSHOT</version>
+    <name>My first vaadin ap</name>
+    <version>1.0</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -111,7 +111,7 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-            <!-- Spring's dependencies for db connection -->
+        <!-- Spring's dependencies for db connection -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -121,7 +121,12 @@
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
-            <!-- Spring's dependencies for security -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- Spring's dependencies for security -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>

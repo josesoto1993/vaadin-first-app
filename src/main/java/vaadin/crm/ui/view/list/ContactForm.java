@@ -54,7 +54,7 @@ public class ContactForm extends FormLayout {
                 email,
                 company,
                 status,
-                createButtonsLayout());
+                configureButtonsLayout());
     }
 
     public void setContact(Contact contact) {
@@ -67,7 +67,7 @@ public class ContactForm extends FormLayout {
      *
      * @return the final layout with all the buttons
      */
-    private HorizontalLayout createButtonsLayout() {
+    private HorizontalLayout configureButtonsLayout() {
         //visuals
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         delete.addThemeVariants(ButtonVariant.LUMO_ERROR);
