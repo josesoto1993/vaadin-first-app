@@ -171,7 +171,7 @@ public class ListView extends VerticalLayout {
         grid.getColumns().forEach(col -> col.setAutoWidth(true));
 
         //selector to interact
-        grid.asSingleSelect().addValueChangeListener(evt -> editContact(evt.getValue()));
+        grid.asSingleSelect().addValueChangeListener(gridNewSelect -> editContact(gridNewSelect.getValue()));
     }
 
     private void editContact(Contact contact) {

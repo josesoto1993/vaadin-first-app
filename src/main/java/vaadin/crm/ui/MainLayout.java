@@ -1,5 +1,6 @@
 package vaadin.crm.ui;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
@@ -14,63 +15,69 @@ import vaadin.crm.security.SecurityService;
 import vaadin.crm.ui.view.dashboard.DashboardView;
 import vaadin.crm.ui.view.list.ListView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @CssImport("./styles/shared-styles.css")
 public class MainLayout extends AppLayout {
 
-    private final H1 headerLogo = new H1();
-    private final DrawerToggle drawerToggle = new DrawerToggle();
-    private final Button logoutButton = new Button();
-    private final HorizontalLayout header = new HorizontalLayout();
-    private final VerticalLayout linksVL = new VerticalLayout();
     private final SecurityService securityService;
 
     public MainLayout(SecurityService securityService) {
         this.securityService = securityService;
-        configureHeader();
-        addToNavbar(header);
-        createDrawer();
+
+        //header
+        addToNavbar(createHeader());
+
+        //Drawer
+        configureDrawer();
     }
 
-    private void configureHeader() {
-        //base configurations
-        header.addClassName("header");
-        header.setWidth("100%");
-        header.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
+    private HorizontalLayout createHeader() {
+        HorizontalLayout headerLayout = new HorizontalLayout();
 
-        //components configurations
-        configureHeaderLogo();
-        configureLogoutButton();
+        configureHeaderStyle(headerLayout);
 
-        //add items to header
-        header.add(drawerToggle);
-        header.add(headerLogo);
-        header.add(logoutButton);
+        headerLayout.add(
+                new DrawerToggle(),
+                createLogo(),
+                createLogoutButton()
+        );
+
+        return headerLayout;
     }
 
-    private void configureHeaderLogo() {
-        headerLogo.setText("Vaadin CRM");
-        headerLogo.addClassName("logo");
-    }
-
-    private void configureLogoutButton() {
+    private Button createLogoutButton() {
+        Button logoutButton = new Button();
         logoutButton.setText("Log out");
         logoutButton.addClickListener(click -> securityService.logout());
+        return logoutButton;
     }
 
-    private void createDrawer() {
-        //create links
-        List<RouterLink> listLink = new ArrayList<>();
-        listLink.add(new RouterLink("List", ListView.class));
-        listLink.add(new RouterLink("Dashboard", DashboardView.class));
+    private H1 createLogo() {
+        H1 headerLogo = new H1();
+        headerLogo.setText("Vaadin CRM");
+        headerLogo.addClassName("logo");
+        return headerLogo;
+    }
 
-        //configurations
-        listLink.forEach(routerLink -> routerLink.setHighlightCondition(HighlightConditions.sameLocation()));
+    private void configureHeaderStyle(HorizontalLayout headerLayout) {
+        headerLayout.addClassName("header");
+        headerLayout.setWidth("100%");
+        headerLayout.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
+    }
 
-        //add links to vertical layout and the result VL to the drawer
-        listLink.forEach(linksVL::add);
+    private void configureDrawer() {
+        VerticalLayout linksVL = new VerticalLayout();
+
+        linksVL.add(
+                createConfiguredRouterLink("List", ListView.class),
+                createConfiguredRouterLink("Dashboard", DashboardView.class)
+        );
+
         addToDrawer(linksVL);
+    }
+
+    private RouterLink createConfiguredRouterLink(String label, Class<? extends Component> viewClass) {
+        final RouterLink routerLink = new RouterLink(label, viewClass);
+        routerLink.setHighlightCondition(HighlightConditions.sameLocation());
+        return routerLink;
     }
 }
