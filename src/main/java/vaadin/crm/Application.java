@@ -2,7 +2,6 @@ package vaadin.crm;
 
 import com.vaadin.flow.component.page.AppShellConfigurator;
 import com.vaadin.flow.server.PWA;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
@@ -19,8 +18,9 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 @PWA(
         name = "Vaadin CRM",
         shortName = "CRM",
+        iconPath = "src/main/resources/META-INF/resources/icons/icon.png",
         offlinePath = "META-INF/resources/offline.html",
-        offlineResources = {"images/logo.png", "images/offline.png"}
+        offlineResources = {"icon/logo.png", "images/offline.png"}
 )
 public class Application extends SpringBootServletInitializer implements AppShellConfigurator {
 

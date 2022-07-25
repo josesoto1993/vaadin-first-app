@@ -3,7 +3,10 @@ package vaadin.crm.ui.view.login;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.login.LoginForm;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.*;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterListener;
+import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.Route;
 
 import javax.annotation.security.PermitAll;
 import java.util.Collections;
@@ -13,46 +16,46 @@ import java.util.Collections;
 @PermitAll
 public class LoginView extends VerticalLayout implements BeforeEnterListener {
 
-    private LoginForm login;
-    private H1 header;
+    private final LoginForm login = new LoginForm();
 
-    public LoginView(){
-        //base configuration
-        this.addClassName("login-view"); //to CSS control
-        this.setSizeFull();
-        this.setJustifyContentMode(JustifyContentMode.CENTER);
-        this.setAlignItems(Alignment.CENTER);
+    public LoginView() {
+        configureLoginView();
 
-        //configure components
-        configureHeader();
-        configureLogin();
+        configureLogin(login);
 
-        //form
         add(
-                header,
+                createHeader(),
                 login
         );
     }
 
-    private void configureHeader() {
-        header = new H1("Vaadin CRM");
+    private void configureLoginView() {
+        this.addClassName("login-view"); //to CSS control
+        this.setSizeFull();
+        this.setJustifyContentMode(JustifyContentMode.CENTER);
+        this.setAlignItems(Alignment.CENTER);
     }
 
-    private void configureLogin() {
-        login = new LoginForm();
+    private H1 createHeader() {
+        H1 header = new H1();
+        header.setText("Vaadin CRM");
+        return header;
+    }
+
+    private void configureLogin(LoginForm login) {
         login.setAction("login");
     }
 
 
     @Override
     public void beforeEnter(BeforeEnterEvent event) {
-        if(!event
+        if (!event
                 .getLocation()
                 .getQueryParameters()
                 .getParameters()
                 .getOrDefault("error", Collections.emptyList())
                 .isEmpty()
-        ){
+        ) {
             login.setError(true);
         }
     }

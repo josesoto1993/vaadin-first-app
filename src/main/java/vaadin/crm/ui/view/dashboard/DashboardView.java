@@ -25,18 +25,20 @@ public class DashboardView extends VerticalLayout {
 
     public DashboardView(ContactService contactService,
                          CompanyService companyService) {
-        //service to get contacts and companies data
         this.contactService = contactService;
         this.companyService = companyService;
 
-        //base configuration
-        addClassName("dashboard-view");
-        setDefaultHorizontalComponentAlignment(Alignment.CENTER);
+        configureDashboardView();
 
         add(
                 getContactStats(),
                 getCompaniesChart()
         );
+    }
+
+    private void configureDashboardView() {
+        addClassName("dashboard-view");
+        setDefaultHorizontalComponentAlignment(Alignment.CENTER);
     }
 
     private Component getContactStats() {
@@ -57,7 +59,7 @@ public class DashboardView extends VerticalLayout {
         companies.forEach((company, employees) ->
                 dataSeries.add(new DataSeriesItem(company, employees)));
 
-        //set and return chart
+        //set values in chart and return chart
         chart.getConfiguration().setSeries(dataSeries);
         return chart;
     }

@@ -54,7 +54,7 @@ public class ContactForm extends FormLayout {
                 email,
                 company,
                 status,
-                configureButtonsLayout());
+                createButtonsLayout(binder));
     }
 
     public void setContact(Contact contact) {
@@ -67,7 +67,7 @@ public class ContactForm extends FormLayout {
      *
      * @return the final layout with all the buttons
      */
-    private HorizontalLayout configureButtonsLayout() {
+    private HorizontalLayout createButtonsLayout(Binder<Contact> binder) {
         //visuals
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         delete.addThemeVariants(ButtonVariant.LUMO_ERROR);
@@ -78,7 +78,7 @@ public class ContactForm extends FormLayout {
         close.addClickShortcut(Key.ESCAPE);
 
         //events
-        save.addClickListener(click -> validateAndSave());
+        save.addClickListener(click -> validateAndSave(binder));
         delete.addClickListener(click -> fireEvent(new DeleteEvent(this, binder.getBean())));
         close.addClickListener(click -> fireEvent(new CloseEvent(this)));
 
@@ -89,7 +89,7 @@ public class ContactForm extends FormLayout {
         return new HorizontalLayout(save, delete, close);
     }
 
-    private void validateAndSave() {
+    private void validateAndSave(Binder<Contact> binder) {
         if (binder.isValid()) {
             fireEvent(new SaveEvent(this, binder.getBean()));
         }

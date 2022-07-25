@@ -9,14 +9,11 @@ import vaadin.crm.backend.repository.ContactRepository;
 import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Random;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
 public class Populator {
-
-    private static final Logger LOGGER = Logger.getLogger(Populator.class.getName());
 
     private final ContactRepository contactRepository;
 
