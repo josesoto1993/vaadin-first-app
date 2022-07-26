@@ -18,7 +18,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 @PWA(
         name = "Vaadin CRM",
         shortName = "CRM",
-        iconPath = "src/main/resources/META-INF/resources/icons/icon.png",
+        iconPath = "META-INF/resources/icons/icon.png",
         offlinePath = "META-INF/resources/offline.html",
         offlineResources = {"icon/logo.png", "images/offline.png"}
 )
